@@ -5,20 +5,24 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/imgproc/imgproc.hpp>
 
-//http://opencv-srf.blogspot.com/
 class ColorTracker
 {
 private:
     ros::ServiceClient client_;
     ros::Publisher pub_;
-    float area_threshold_low_ = 5.0e+3;
-    float area_threshold_high_ = 2.5e+6;
-    float angular_gain_ = -0.5;
-    float linear_gain_ = 0.3;
+    float area_threshold_low_;
+    float area_threshold_high_;
+    float angular_gain_;
+    float linear_gain_;
 
 public:
     ColorTracker(ros::NodeHandle &nh)
     {
+        area_threshold_low_ = nh.param("area_threshold_low", 5.0e+3);
+        area_threshold_high_ = nh.param("area_threshold_high", 2.5e+6);
+        angular_gain_ = nh.param("angular_gain", 0.5);
+        linear_gain_ = nh.param("linear_gain", 0.3);
+
         client_ = nh.serviceClient<ball_chaser::DriveToTarget>("/ball_chaser/command_robot");
         pub_ = nh.advertise<geometry_msgs::Point>("normalized_point", 2);
     }
@@ -34,7 +38,7 @@ public:
                 cv::Vec2i image_size(src.cols, src.rows);
                 cv::Vec2f normalized_point = normalizePoint(image_point, image_size);
                 ROS_DEBUG_STREAM("Normalized point X = " << normalized_point[0]);
-                driveRobot(linear_gain_, angular_gain_*normalized_point[0]);
+                driveRobot(linear_gain_, -angular_gain_*normalized_point[0]);
                 publishFeedback(normalized_point[0], normalized_point[1]);
             }
             else
@@ -94,9 +98,9 @@ public:
 
     cv::Vec2f normalizePoint(cv::Vec2i &img_point, cv::Vec2i &img_size)
     {
-        ROS_INFO_STREAM("Image point X = " << img_point[0]);
-        ROS_INFO_STREAM("Width = " << img_size[0]);
-        ROS_INFO_STREAM("Height = " << img_size[1]);
+        ROS_DEBUG_STREAM("Image point X = " << img_point[0]);
+        ROS_DEBUG_STREAM("Width = " << img_size[0]);
+        ROS_DEBUG_STREAM("Height = " << img_size[1]);
         float width = static_cast<float>(img_size[0]);
         float height = static_cast<float>(img_size[1]);
 
