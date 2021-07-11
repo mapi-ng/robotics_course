@@ -11,7 +11,8 @@ class ColorTracker
 private:
     ros::ServiceClient client_;
     ros::Publisher pub_;
-    int area_threshold_ = 5000;
+    float area_threshold_low_ = 5.0e+3;
+    float area_threshold_high_ = 2.5e+6;
     float angular_gain_ = -0.5;
     float linear_gain_ = 0.3;
 
@@ -82,7 +83,8 @@ public:
 
         cv::Moments img_moments = moments(transformed);
 
-        if (img_moments.m00 > area_threshold_) {
+        if (img_moments.m00 > area_threshold_low_ &&
+            img_moments.m00 < area_threshold_high_) {
             position[0] = img_moments.m10 / img_moments.m00;
             position[1] = img_moments.m01 / img_moments.m00;
         }
