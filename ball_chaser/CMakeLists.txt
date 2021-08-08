@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(ball_chaser)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -145,8 +147,8 @@ add_executable(process_image src/process_image.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(drive_bot ${drive_bot_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(process_image ${process_image_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(drive_bot ${drive_bot_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages)
+add_dependencies(process_image ${process_image_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(drive_bot
