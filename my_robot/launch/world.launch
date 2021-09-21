@@ -11,7 +11,7 @@
   <arg name="yaw" default="1.5708"/>
 
   <!-- World File -->
-  <arg name="world_file" default="$(find my_robot)/worlds/world_proj.world"/>
+  <arg name="world_file" default="$(find maps)/worlds/world_proj.world"/>
 
   <!-- Launch other relevant files-->
   <include file="$(find my_robot)/launch/robot_description.launch"/>
@@ -34,6 +34,6 @@
               -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
 
   <!-- Launch RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find my_robot)/rviz/my_robot_config.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" args="-d $(find rvizConfig)/rviz/my_robot_config.rviz"/>
 </launch>
 
