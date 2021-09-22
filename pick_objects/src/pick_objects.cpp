@@ -13,7 +13,8 @@ move_base_msgs::MoveBaseGoal createGoal(float x, float y) {
   goal.target_pose.header.stamp = ros::Time::now();
 
   // Define a position and orientation for the robot to reach
-  goal.target_pose.pose.position.x = 1.0;
+  goal.target_pose.pose.position.x = x;
+  goal.target_pose.pose.position.y = y;
   goal.target_pose.pose.orientation.w = 1.0;
 
   return goal;
@@ -32,19 +33,30 @@ int main(int argc, char** argv){
 
   std::vector<move_base_msgs::MoveBaseGoal> goals;
   goals.push_back(createGoal(1.0, 1.0));
+  goals.push_back(createGoal(1.0, 2.0));
 
-   // Send the goal position and orientation for the robot to reach
-  ROS_INFO("Sending goal");
-  ac.sendGoal(goals[0]);
+  for (auto goal : goals) {
+    // Send the goal position and orientation for the robot to reach
+    ROS_INFO("Sending goal");
+    ac.sendGoal(goal);
 
-  // Wait an infinite time for the results
-  ac.waitForResult();
+    // Wait an infinite time for the results
+    ac.waitForResult();
 
-  // Check if the robot reached its goal
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Hooray, the base moved 1 meter forward");
-  else
-    ROS_INFO("The base failed to move forward 1 meter for some reason");
+    // Check if the robot reached its goal
+    if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
+      ROS_INFO_STREAM("Hooray, the base moved to the goal (x="
+        << goal.target_pose.pose.position.x << ", y="
+        << goal.target_pose.pose.position.y << ")");
+    } else {
+      ROS_INFO("The base failed to move forward 1 meter for some reason");
+    }
+
+    ROS_INFO("Waiting 5 secons");
+    ros::Duration(5.0).sleep();
+  }
+
+  ROS_INFO("Finished!");
 
   return 0;
 }
