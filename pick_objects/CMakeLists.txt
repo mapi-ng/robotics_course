@@ -135,7 +135,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME} src/pick_objects.cpp)
+add_executable(pick_objects src/pick_objects.cpp)
+add_executable(pick_objects_marker_sub src/pick_objects_marker_sub.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -145,13 +146,16 @@ add_executable(${PROJECT_NAME} src/pick_objects.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(pick_objects ${pick_objects_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(pick_objects_marker_sub ${pick_objects_marker_sub_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(pick_objects
   ${catkin_LIBRARIES}
 )
-
+target_link_libraries(pick_objects_marker_sub
+  ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############

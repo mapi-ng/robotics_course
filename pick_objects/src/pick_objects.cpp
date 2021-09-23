@@ -19,6 +19,7 @@ move_base_msgs::MoveBaseGoal createGoal(float x, float y) {
 
   return goal;
 }
+
 int main(int argc, char** argv){
   // Initialize the pick_objects node
   ros::init(argc, argv, "pick_objects");
@@ -32,8 +33,8 @@ int main(int argc, char** argv){
   }
 
   std::vector<move_base_msgs::MoveBaseGoal> goals;
-  goals.push_back(createGoal(1.0, 1.0));
-  goals.push_back(createGoal(1.0, 2.0));
+  goals.push_back(createGoal(2.0, 1.0));
+  goals.push_back(createGoal(-2.0, 1.0));
 
   for (auto goal : goals) {
     // Send the goal position and orientation for the robot to reach

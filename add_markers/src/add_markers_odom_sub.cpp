@@ -66,13 +66,13 @@ int main( int argc, char** argv )
         break;
       case States::ReachedPickup:
         ROS_INFO_ONCE("State - ReachedPickup");
-        ROS_INFO_ONCE("Waiting 5 seconds");
-        ros::Duration(5.0).sleep();
         if (m_pub.publishMarker(marker_pick_up, 0, visualization_msgs::Marker::DELETE)) {
           nav_state = States::GoingToDropOff;
         }
         break;
       case States::GoingToDropOff:
+        ROS_INFO_ONCE("Waiting 5 seconds");
+        ros::Duration(5.0).sleep();
         ROS_INFO_ONCE("State - GoingToDropOff");
         if (arrivedToMarker(drop_off)) {
           nav_state = States::ReachedDropOff;

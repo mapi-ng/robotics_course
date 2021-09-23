@@ -28,9 +28,9 @@ bool MarkerPublisher::publishMarker(const geometry_msgs::Point &point, uint32_t 
   marker.pose.orientation.w = 1.0;
 
   // 1x1x1 here means 1m on a side
-  marker.scale.x = 1.0;
-  marker.scale.y = 1.0;
-  marker.scale.z = 1.0;
+  marker.scale.x = 0.4;
+  marker.scale.y = 0.4;
+  marker.scale.z = 0.4;
 
   marker.color.r = 0.0f;
   marker.color.g = 1.0f;
