@@ -41,7 +41,8 @@ int main( int argc, char** argv )
   enum class States {
     PublishPickUp, GoingToPickUp, ReachedPickup,
     PublishDropOff, GoingToDropOff, ReachedDropOff,
-    Finished };
+    Finished
+  };
 
   States nav_state = States::PublishPickUp;
   bool running = true;
