@@ -2,6 +2,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <visualization_msgs/Marker.h>
 #include <actionlib/client/simple_action_client.h>
+#include <atomic>
 
 using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
 
@@ -11,11 +12,13 @@ class ObjectPicker
     std::shared_ptr<ros::NodeHandle> nh_;
     ros::Subscriber marker_sub_;
     MoveBaseClient ac_;
+    std::atomic_bool goal_in_progress_;
 
   public:
     ObjectPicker(std::shared_ptr<ros::NodeHandle> nh) :
       nh_(nh),
-      ac_(*nh, "move_base", true)
+      ac_(*nh, "move_base", true),
+      goal_in_progress_(false)
     {
       // Wait 5 sec for move_base action server to come up
       while(!ac_.waitForServer(ros::Duration(5.0))){
@@ -36,22 +39,27 @@ class ObjectPicker
       ROS_DEBUG("Received marker callback.");
       ROS_INFO("Sending goal");
       ac_.sendGoal(createGoal(msg->pose.position.x, msg->pose.position.y));
+      goal_in_progress_ = true;
     }
 
     bool waitForResultForever()
     {
-      ac_.waitForResult();
+      if (goal_in_progress_) {
+        ROS_INFO("Going to wait to reach the goal...");
+        ac_.waitForResult();
 
-      if(ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
-        ROS_INFO_STREAM("Hooray, the base moved to the goa!");
-        ROS_INFO("Waiting 5 secons");
-        ros::Duration(5.0).sleep();
-        return true;
-      } else {
-        ROS_INFO("The base failed to move to the goal...");
-        return false;
+        if(ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
+          ROS_INFO_STREAM("Hooray, the base moved to the goa!");
+          goal_in_progress_ = false;
+          ROS_INFO("Waiting 5 secons");
+          ros::Duration(5.0).sleep();
+          return true;
+        } else {
+          ROS_INFO("The base failed to move to the goal...");
+          goal_in_progress_ = false;
+          return false;
+        }
       }
-
     }
 
     move_base_msgs::MoveBaseGoal createGoal(float x, float y)
