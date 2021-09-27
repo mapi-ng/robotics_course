@@ -80,8 +80,7 @@ int main(int argc, char** argv){
   ObjectPicker object_picker(nh);
 
   bool running = true;
-  while (running && ros::ok())
-  {
+  while (running && ros::ok()) {
     object_picker.waitForResultForever();
     ros::spinOnce();
   }

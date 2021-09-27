@@ -1,12 +1,12 @@
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include "add_markers/marker_publisher.hpp"
-#include "nav_msgs/Odometry.h"
+#include "geometry_msgs/PoseWithCovarianceStamped.h"
 
 geometry_msgs::Pose robot_pose;
-float position_tolerance = 0.2; // 20 cm
+float position_tolerance = 0.3; // 30 cm
 
-void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
+void odomCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg)
 {
   ROS_DEBUG("Received odometry callback.");
   robot_pose = msg->pose.pose;
@@ -27,7 +27,7 @@ int main( int argc, char** argv )
   ros::init(argc, argv, "add_markers_odom_sub");
   std::shared_ptr<ros::NodeHandle> nh =
     std::make_shared<ros::NodeHandle>("");
-  ros::Subscriber odom_sub = nh->subscribe("/odom", 1, odomCallback);
+  ros::Subscriber odom_sub = nh->subscribe("/amcl_pose", 1, odomCallback);
 
   MarkerPublisher m_pub(nh);
 
