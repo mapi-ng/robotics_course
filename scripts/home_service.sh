@@ -1,11 +1,9 @@
 #!/bin/sh
 xterm -e  " roscore" &
 sleep 3
-xterm -e  " roslaunch turtlebot_gazebo turtlebot_world.launch world_file:=$(rospack find maps)/worlds/world_proj.world" &
+xterm -e  " roslaunch my_robot world.launch" &
 sleep 3
-xterm  -e  " roslaunch turtlebot_gazebo amcl_demo.launch map_file:=$(rospack find maps)/maps/map.yaml " &
-sleep 3
-xterm  -e  " roslaunch turtlebot_rviz_launchers view_navigation.launch " &
+xterm  -e  " roslaunch my_robot amcl.launch map_file:=$(rospack find maps)/maps/map.yaml " &
 sleep 3
 xterm  -e  " rosrun pick_objects pick_objects " &
 sleep 3
