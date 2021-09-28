@@ -33,8 +33,8 @@ int main(int argc, char** argv){
   }
 
   std::vector<move_base_msgs::MoveBaseGoal> goals;
-  goals.push_back(createGoal(2.0, 1.0));
-  goals.push_back(createGoal(-2.0, 1.0));
+  goals.push_back(createGoal(0.8, -3.8));
+  goals.push_back(createGoal(-8.0, -4.5));
 
   for (auto goal : goals) {
     // Send the goal position and orientation for the robot to reach

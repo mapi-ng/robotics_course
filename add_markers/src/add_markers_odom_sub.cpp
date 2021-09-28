@@ -32,11 +32,11 @@ int main( int argc, char** argv )
   MarkerPublisher m_pub(nh);
 
   geometry_msgs::Point marker_pick_up;
-  marker_pick_up.x = 2.0;
-  marker_pick_up.y = 1.0;
+  marker_pick_up.x = 0.8;
+  marker_pick_up.y = -3.8;
   geometry_msgs::Point drop_off;
-  drop_off.x = -2.0;
-  drop_off.y = 1.0;
+  drop_off.x = -8.0;
+  drop_off.y = -4.5;
 
   enum class States {
     PublishPickUp, GoingToPickUp, ReachedPickup,
