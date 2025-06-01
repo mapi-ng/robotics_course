@@ -1,0 +1,14 @@
+<launch>
+
+  <param name="area_threshold_low" type="double" value="5.0e+3" />
+  <param name="area_threshold_high" type="double" value="2.5e+6" />
+  <param name="angular_gain" type="double" value="0.7" />
+  <param name="linear_gain" type="double" value="0.5" />
+
+  <node name="drive_bot" type="drive_bot" pkg="ball_chaser" output="screen">
+  </node>
+
+  <node name="process_image" type="process_image" pkg="ball_chaser" output="screen">
+  </node>
+
+</launch>

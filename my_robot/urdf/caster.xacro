@@ -1,0 +1,45 @@
+<?xml version='1.0'?>
+
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:macro name='link_caster' params='name'>
+    <xacro:property name="caster_mass" value="0.5" />
+    <xacro:property name="caster_radius" value="0.05" />
+
+    <link name='${name}'>
+      <inertial>
+        <mass value="${caster_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+            ixx="${2/5*caster_mass*caster_radius*caster_radius}" ixy="0" ixz="0"
+            iyy="${2/5*caster_mass*caster_radius*caster_radius}" iyz="0"
+            izz="${2/5*caster_mass*caster_radius*caster_radius}"
+        />
+      </inertial>
+
+      <collision name='back_caster_collision'>
+        <origin xyz="0 0 0" rpy=" 0 0 0"/>
+          <geometry>
+            <sphere radius="${caster_radius - 0.0001}"/>
+          </geometry>
+      </collision>    
+
+      <visual name='back_caster_visual'>
+        <origin xyz="0 0 0" rpy=" 0 0 0"/>
+          <geometry>
+            <sphere radius="${caster_radius}"/>
+          </geometry>
+      </visual>
+    </link>
+  </xacro:macro>
+     
+  <xacro:macro name='joint_caster' params='name child origin_xyz'> 
+    <joint type="fixed" name="${name}">
+      <origin xyz="${origin_xyz}" rpy="0 0 0"/>
+      <child link="${child}"/>
+      <parent link="chassis"/>
+      <axis xyz="0 1 0" rpy="0 0 0"/>
+      <limit effort="10000" velocity="1000"/>
+      <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+  </xacro:macro>
+</robot>
